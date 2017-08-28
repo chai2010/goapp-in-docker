@@ -7,7 +7,7 @@
 package main
 
 /*
-static int getValue() {
+static int answerToLife() {
 	return 42;
 }
 */
@@ -17,5 +17,5 @@ import (
 )
 
 func main() {
-	fmt.Println("hello v2!!!", C.getValue())
+	fmt.Println("hello v2!!!", C.answerToLife())
 }

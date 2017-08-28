@@ -12,3 +12,7 @@ localhost:hello-v2 chai$
 ```
 
 在 macOS 上 cgo 交叉编译错误!
+
+- https://github.com/mattn/go-sqlite3/
+- https://github.com/mattn/go-sqlite3/issues/106
+
