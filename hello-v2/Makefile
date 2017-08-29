@@ -5,6 +5,8 @@
 # https://github.com/mattn/go-sqlite3/issues/106#issuecomment-226280613
 # docker run --rm -v $GOPATH:/go -w /go/src/path/to/app golang:latest go build -v
 
+# docker run --rm -v $(shell go env GOPATH):/go -w /go/src/$(shell go list) golang:latest go build --ldflags '-extldflags "-static"' -o $(TARG).linux.exe $(SOURCES)
+
 TARG=hello_v2
 
 SOURCES=$(wildcard ./*.go)
@@ -17,7 +19,7 @@ docker: $(TARG).linux.exe Dockerfile
 
 $(TARG).linux.exe: $(SOURCES) Makefile
 	go fmt ./...
-	docker run --rm -v $(shell go env GOPATH):/go -w /go/src/$(shell go list) golang:latest go build -o $(TARG).linux.exe $(SOURCES)
+	docker run --rm -v $(shell go env GOPATH):/go -w /go/src/$(shell go list) golang:latest go build --ldflags '-extldflags "-static"' -o $(TARG).linux.exe $(SOURCES)
 
 build:
 	docker run --rm -v $(shell go env GOPATH):/go -w /go/src/$(shell go list) golang:latest go build -o $(TARG).linux.exe $(SOURCES)

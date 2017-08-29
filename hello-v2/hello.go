@@ -7,6 +7,10 @@
 package main
 
 /*
+#cgo linux LDFLAGS: -lm -lstdc++
+
+#include <math.h>
+
 static int answerToLife() {
 	return 42;
 }
@@ -14,8 +18,20 @@ static int answerToLife() {
 import "C"
 import (
 	"fmt"
+	"log"
+	"net/http"
 )
 
 func main() {
-	fmt.Println("hello v2!!!", C.answerToLife())
+	fmt.Println("hello v2!!!")
+	fmt.Println("answerToLife:", C.answerToLife())
+	fmt.Println("sqrt(9527):", float64(C.sqrt(9527)))
+
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		log.Printf("Hello, 世界")
+		fmt.Fprintf(w, "Hello, 世界")
+	})
+
+	log.Fatal(http.ListenAndServe(":8080", nil))
+
 }
