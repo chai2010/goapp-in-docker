@@ -5,6 +5,8 @@
 # https://github.com/mattn/go-sqlite3/issues/106#issuecomment-226280613
 # docker run --rm -v $GOPATH:/go -w /go/src/path/to/app golang:latest go build -v
 
+# http://blog.hashbangbash.com/2014/04/linking-golang-statically/
+
 # docker run --rm -v $(shell go env GOPATH):/go -w /go/src/$(shell go list) golang:latest go build --ldflags '-extldflags "-static"' -o $(TARG).linux.exe $(SOURCES)
 
 TARG=hello_v2
