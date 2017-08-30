@@ -10,7 +10,7 @@ TARG=hello_v2
 SOURCES=$(wildcard ./*.go)
 
 GO_LDFLAGS=--ldflags '-w -s -extldflags "-static"'
-DOCKER_VOLUMN=-v $(shell go env GOPATH):/go -w /go/src/$(shell go list)
+DOCKER_VOLUME=-v $(shell go env GOPATH):/go -w /go/src/$(shell go list)
 
 default: docker
 	docker run -it $(TARG)
@@ -20,10 +20,10 @@ docker: $(TARG).linux.exe Dockerfile
 
 $(TARG).linux.exe: $(SOURCES) Makefile
 	go fmt ./...
-	docker run --rm $(DOCKER_VOLUMN) golang:latest go build $(GO_LDFLAGS) -o $(TARG).linux.exe $(SOURCES)
+	docker run --rm $(DOCKER_VOLUME) golang:latest go build $(GO_LDFLAGS) -o $(TARG).linux.exe $(SOURCES)
 
 build:
-	docker run --rm $(DOCKER_VOLUMN) golang:latest go build $(GO_LDFLAGS) -o $(TARG).linux.exe $(SOURCES)
+	docker run --rm $(DOCKER_VOLUME) golang:latest go build $(GO_LDFLAGS) -o $(TARG).linux.exe $(SOURCES)
 
 fmt:
 	go fmt ./...
