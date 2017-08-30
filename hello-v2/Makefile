@@ -3,15 +3,14 @@
 # license that can be found in the LICENSE file.
 
 # https://github.com/mattn/go-sqlite3/issues/106#issuecomment-226280613
-# docker run --rm -v $GOPATH:/go -w /go/src/path/to/app golang:latest go build -v
-
 # http://blog.hashbangbash.com/2014/04/linking-golang-statically/
-
-# docker run --rm -v $(shell go env GOPATH):/go -w /go/src/$(shell go list) golang:latest go build --ldflags '-extldflags "-static"' -o $(TARG).linux.exe $(SOURCES)
 
 TARG=hello_v2
 
 SOURCES=$(wildcard ./*.go)
+
+GO_LDFLAGS=--ldflags '-w -s -extldflags "-static"'
+DOCKER_VOLUMN=-v $(shell go env GOPATH):/go -w /go/src/$(shell go list)
 
 default: docker
 	docker run -it $(TARG)
@@ -21,10 +20,10 @@ docker: $(TARG).linux.exe Dockerfile
 
 $(TARG).linux.exe: $(SOURCES) Makefile
 	go fmt ./...
-	docker run --rm -v $(shell go env GOPATH):/go -w /go/src/$(shell go list) golang:latest go build --ldflags '-w -s -extldflags "-static"' -o $(TARG).linux.exe $(SOURCES)
+	docker run --rm $(DOCKER_VOLUMN) golang:latest go build $(GO_LDFLAGS) -o $(TARG).linux.exe $(SOURCES)
 
 build:
-	docker run --rm -v $(shell go env GOPATH):/go -w /go/src/$(shell go list) golang:latest go build -o $(TARG).linux.exe $(SOURCES)
+	docker run --rm $(DOCKER_VOLUMN) golang:latest go build $(GO_LDFLAGS) -o $(TARG).linux.exe $(SOURCES)
 
 fmt:
 	go fmt ./...
