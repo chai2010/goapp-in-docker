@@ -21,7 +21,7 @@ docker: $(TARG).linux.exe Dockerfile
 
 $(TARG).linux.exe: $(SOURCES) Makefile
 	go fmt ./...
-	docker run --rm -v $(shell go env GOPATH):/go -w /go/src/$(shell go list) golang:latest go build --ldflags '-extldflags "-static"' -o $(TARG).linux.exe $(SOURCES)
+	docker run --rm -v $(shell go env GOPATH):/go -w /go/src/$(shell go list) golang:latest go build --ldflags '-w -s -extldflags "-static"' -o $(TARG).linux.exe $(SOURCES)
 
 build:
 	docker run --rm -v $(shell go env GOPATH):/go -w /go/src/$(shell go list) golang:latest go build -o $(TARG).linux.exe $(SOURCES)

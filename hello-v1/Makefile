@@ -14,7 +14,7 @@ docker: $(TARG).linux.exe Dockerfile
 
 $(TARG).linux.exe: $(SOURCES) Makefile
 	go fmt ./...
-	CGO_ENABLED=0 GOOS=linux go build -o $(TARG).linux.exe $(SOURCES)
+	CGO_ENABLED=0 GOOS=linux go build --ldflags '-w -s' -o $(TARG).linux.exe $(SOURCES)
 
 fmt:
 	go fmt ./...
