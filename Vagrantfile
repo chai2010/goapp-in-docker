@@ -14,26 +14,30 @@
 # vagrant reload --provision-with shell
 
 Vagrant.configure(2) do |config|
-    # https://github.com/tmatilai/vagrant-proxyconf
-    # vagrant plugin install vagrant-proxyconf
-    if Vagrant.has_plugin?("vagrant-proxyconf")
-      #config.proxy.http     = "http://127.0.0.1:2081/"
-      #config.proxy.https    = "http://127.0.0.1:2081/"
-      #config.proxy.no_proxy = "localhost,127.0.0.1,.example.com"
-    end
-  
-    config.vm.box = "centos/7"
-    config.vm.box_check_update = false
-  
-    config.vm.synced_folder ".", "/vagrant"
-    config.vm.network "forwarded_port", guest: 80, host: 2010
-  
-    # https://www.vagrantup.com/docs/provisioning/basic_usage.html
-    config.vm.provision "shell", path: "bootstrap.sh"
-    config.vm.provision "shell", inline: <<-SHELL
-      docker pull hello-world
-      docker run  hello-world
-      echo "done"
-    SHELL
-  end
-  
+	# https://github.com/tmatilai/vagrant-proxyconf
+	# vagrant plugin install vagrant-proxyconf
+	if Vagrant.has_plugin?("vagrant-proxyconf")
+		#config.proxy.http     = "http://127.0.0.1:2081/"
+		#config.proxy.https    = "http://127.0.0.1:2081/"
+		#config.proxy.no_proxy = "localhost,127.0.0.1,.example.com"
+	end
+
+	config.vm.box = "centos/7"
+	config.vm.box_check_update = false
+
+	# vagrant rsync-auto
+	# https://stackoverflow.com/questions/29731003/synced-folder-in-vagrant-is-not-syncing-in-realtime
+	config.vm.synced_folder ".", "/vagrant", type: "rsync",
+		rsync__exclude: ".git/",
+		owner: "vagrant",
+		group: "vagrant"
+	config.vm.network "forwarded_port", guest: 80, host: 2010
+
+	# https://www.vagrantup.com/docs/provisioning/basic_usage.html
+	config.vm.provision "shell", path: "bootstrap.sh"
+	config.vm.provision "shell", inline: <<-SHELL
+		docker pull hello-world
+		docker run  hello-world
+		echo "done"
+	SHELL
+end
