@@ -4,6 +4,8 @@
 
 # vagrant up
 # vagrant reload
+
+# vagrant rsync
 # vagrant status
 # vagrant ssh
 
@@ -25,19 +27,15 @@ Vagrant.configure(2) do |config|
 	config.vm.box = "centos/7"
 	config.vm.box_check_update = false
 
-	# vagrant rsync-auto
+	# vagrant rsync
 	# https://stackoverflow.com/questions/29731003/synced-folder-in-vagrant-is-not-syncing-in-realtime
-	config.vm.synced_folder ".", "/vagrant", type: "rsync",
-		rsync__exclude: ".git/",
-		owner: "vagrant",
-		group: "vagrant"
+	config.vm.synced_folder ".", "/vagrant"
 	config.vm.network "forwarded_port", guest: 80, host: 2010
 
 	# https://www.vagrantup.com/docs/provisioning/basic_usage.html
 	config.vm.provision "shell", path: "bootstrap.sh"
 	config.vm.provision "shell", inline: <<-SHELL
-		docker pull hello-world
-		docker run  hello-world
+		docker run hello-world
 		echo "done"
 	SHELL
 end
